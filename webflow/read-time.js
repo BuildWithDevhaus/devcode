@@ -9,5 +9,5 @@ container.forEach((item) => {
   const wordCount = text.split(/\s/g).length;
   const readTime = Math.ceil(wordCount / wordsPerMinute);
 
-  duration.textContent = readTime;
+  duration.textContent = readTime > 1 ? `${readTime} mins` : `${readTime} min`;
 });

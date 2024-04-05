@@ -29,7 +29,7 @@
       // geoIp lookup function
       geoIpLookup: null,
       // initial country
-      initialCountry: intlTelInputInitialCountry ? intlTelInputInitialCountry : "",
+      initialCountry: "hk",
       // don't insert international dial codes
       nationalMode: true,
       // number type to use for placeholders

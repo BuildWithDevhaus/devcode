@@ -18,15 +18,15 @@ const reviewRating = () => {
       let remainingRating = Math.round(rating * 10);
 
       for (let i = 0; i < totalStars; i++) {
-          if (remainingRating >= 6) {
-              starWrapper.appendChild(fullStar.cloneNode(true));
-              remainingRating -= 10;
-          } else if (remainingRating >= 1) {
-              starWrapper.appendChild(halfStar.cloneNode(true));
-              remainingRating -= 5;
-          } else {
-              starWrapper.appendChild(emptyStar.cloneNode(true));
-          }
+        if (remainingRating >= 6) {
+          starWrapper.appendChild(fullStar.cloneNode(true));
+          remainingRating -= 10;
+        } else if (remainingRating >= 1) {
+          starWrapper.appendChild(halfStar.cloneNode(true));
+          remainingRating -= 5;
+        } else {
+          starWrapper.appendChild(emptyStar.cloneNode(true));
+        }
       }
 
       reviewCount.textContent = container.querySelector('[review-count]').textContent.trim();

@@ -16,19 +16,19 @@ if (typeof analytics !== 'undefined') {
 const trackEvent = async (eventName, property) => {
   if (!devhausAnalytics) return;
   const firedEvent = await devhausAnalytics.track(eventName, { ...property, metadata: getMetadata() })
-  console.log(firedEvent);
+  // console.log(firedEvent);
 }
 
 const pageEvent = async (eventName, property) => {
   if (!devhausAnalytics) return;
   const firedEvent = await devhausAnalytics.page(eventName, { ...property, metadata: getMetadata() })
-  console.log(firedEvent);
+  // console.log(firedEvent);
 }
 
 const identifyEvent = async (property) => {
   if (!devhausAnalytics) return;
   const firedEvent = await devhausAnalytics.identify(property)
-  console.log(firedEvent);
+  // console.log(firedEvent);
 }
 
 const getMetadata = () => {

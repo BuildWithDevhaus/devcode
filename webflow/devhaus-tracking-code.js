@@ -1,9 +1,12 @@
-let devhausAnalytics;
+let segmentAnalytics;
+let gaAnalytics;
 
 if (typeof analytics !== 'undefined') {
-  devhausAnalytics = analytics;
-} else {
-  devhausAnalytics = _analytics.Analytics({
+  segmentAnalytics = analytics;
+}
+
+if (typeof googleMeasurementId !== 'undefined') {
+  gaAnalytics = _analytics.Analytics({
     app: 'devhaus-tracking-code',
     plugins: [
       analyticsGa.init({
@@ -14,21 +17,63 @@ if (typeof analytics !== 'undefined') {
 }
 
 const trackEvent = async (eventName, property) => {
-  if (!devhausAnalytics) return;
-  const firedEvent = await devhausAnalytics.track(eventName, { ...property, metadata: getMetadata() })
-  // console.log(firedEvent);
+  if (!segmentAnalytics && !googleMeasurementId) {
+    console.log('Segment snippets and Google Measurement ID is not found')
+    return;
+  }
+
+  if (segmentAnalytics && googleMeasurementId) {
+    const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() })
+    console.log(firedEvent, 'segment');
+
+    // TODO: add google analytics when segment free plan is bursted
+  } else if (segmentAnalytics) {
+    const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() })
+    console.log(firedEvent, 'segment');
+  } else if (googleMeasurementId) {
+    const firedEvent = await gaAnalytics.track(eventName, { ...property, metadata: getMetadata() })
+    console.log(firedEvent, 'google analytics');
+  }
 }
 
 const pageEvent = async (eventName, property) => {
-  if (!devhausAnalytics) return;
-  const firedEvent = await devhausAnalytics.page(eventName, { ...property, metadata: getMetadata() })
-  // console.log(firedEvent);
+  if (!segmentAnalytics && !googleMeasurementId) {
+    console.log('Segment snippets and Google Measurement ID is not found')
+    return;
+  }
+
+  if (segmentAnalytics && googleMeasurementId) {
+    const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() })
+    console.log(firedEvent, 'segment');
+
+    // TODO: add google analytics when segment free plan is bursted
+  } else if (segmentAnalytics) {
+    const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() })
+    console.log(firedEvent, 'segment');
+  } else if (googleMeasurementId) {
+    const firedEvent = await gaAnalytics.track(eventName, { ...property, metadata: getMetadata() })
+    console.log(firedEvent, 'google analytics');
+  }
 }
 
 const identifyEvent = async (property) => {
-  if (!devhausAnalytics) return;
-  const firedEvent = await devhausAnalytics.identify(property)
-  // console.log(firedEvent);
+  if (!segmentAnalytics && !googleMeasurementId) {
+    console.log('Segment snippets and Google Measurement ID is not found')
+    return;
+  }
+
+  if (segmentAnalytics && googleMeasurementId) {
+    const firedEvent = await segmentAnalytics.identify(property)
+    console.log(firedEvent, 'segment');
+
+    // TODO: add google analytics when segment free plan is bursted
+  } else if (segmentAnalytics) {
+    const firedEvent = await segmentAnalytics.identify(property)
+    console.log(firedEvent, 'segment');
+  } else if (googleMeasurementId) {
+    const firedEvent = await gaAnalytics.identify(property)
+    console.log(firedEvent, 'google analytics');
+  }
 }
 
 const getMetadata = () => {

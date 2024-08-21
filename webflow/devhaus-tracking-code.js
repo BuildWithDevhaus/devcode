@@ -5,7 +5,11 @@ if (typeof analytics !== 'undefined') {
   segmentAnalytics = analytics;
 }
 
-if (typeof googleMeasurementId !== 'undefined') {
+const devhausTrackingCodeScript = document.querySelector('#devhaus-tracking-code');
+const googleMeasurementId = devhausTrackingCodeScript.getAttribute('google-measurement-id');
+const trackByDefault = devhausTrackingCodeScript.getAttribute('track-by-default');
+
+if (googleMeasurementId) {
   gaAnalytics = _analytics.Analytics({
     app: 'devhaus-tracking-code',
     plugins: [
@@ -22,17 +26,19 @@ const trackEvent = async (eventName, property) => {
     return;
   }
 
-  if (segmentAnalytics && googleMeasurementId) {
-    const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() })
-    // console.log(firedEvent, 'segment');
-
-    // TODO: add google analytics when segment free plan is bursted
-  } else if (segmentAnalytics) {
-    const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() })
-    // console.log(firedEvent, 'segment');
-  } else if (googleMeasurementId) {
-    const firedEvent = await gaAnalytics.track(eventName, { ...property, metadata: getMetadata() })
-    // console.log(firedEvent, 'google analytics');
+  if (trackByDefault === 'true' || localStorage.getItem('devhaus-consent') === 'true') {
+    if (segmentAnalytics && googleMeasurementId) {
+      const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() });
+      console.log(firedEvent, 'segment');
+  
+      // TODO: add google analytics when segment free plan is bursted
+    } else if (segmentAnalytics) {
+      const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() });
+      console.log(firedEvent, 'segment');
+    } else if (googleMeasurementId) {
+      const firedEvent = await gaAnalytics.track(eventName, { ...property, metadata: getMetadata() });
+      console.log(firedEvent, 'google analytics');
+    }
   }
 }
 
@@ -42,17 +48,19 @@ const pageEvent = async (eventName, property) => {
     return;
   }
 
-  if (segmentAnalytics && googleMeasurementId) {
-    const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() })
-    // console.log(firedEvent, 'segment');
-
-    // TODO: add google analytics when segment free plan is bursted
-  } else if (segmentAnalytics) {
-    const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() })
-    // console.log(firedEvent, 'segment');
-  } else if (googleMeasurementId) {
-    const firedEvent = await gaAnalytics.track(eventName, { ...property, metadata: getMetadata() })
-    // console.log(firedEvent, 'google analytics');
+  if (trackByDefault === 'true' || localStorage.getItem('devhaus-consent') === 'true') {
+    if (segmentAnalytics && googleMeasurementId) {
+      const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() });
+      // console.log(firedEvent, 'segment');
+  
+      // TODO: add google analytics when segment free plan is bursted
+    } else if (segmentAnalytics) {
+      const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() });
+      // console.log(firedEvent, 'segment');
+    } else if (googleMeasurementId) {
+      const firedEvent = await gaAnalytics.track(eventName, { ...property, metadata: getMetadata() });
+      // console.log(firedEvent, 'google analytics');
+    }
   }
 }
 
@@ -62,17 +70,19 @@ const identifyEvent = async (property) => {
     return;
   }
 
-  if (segmentAnalytics && googleMeasurementId) {
-    const firedEvent = await segmentAnalytics.identify(property)
-    // console.log(firedEvent, 'segment');
-
-    // TODO: add google analytics when segment free plan is bursted
-  } else if (segmentAnalytics) {
-    const firedEvent = await segmentAnalytics.identify(property)
-    // console.log(firedEvent, 'segment');
-  } else if (googleMeasurementId) {
-    const firedEvent = await gaAnalytics.identify(property)
-    // console.log(firedEvent, 'google analytics');
+  if (trackByDefault === 'true' || localStorage.getItem('devhaus-consent') === 'true') {
+    if (segmentAnalytics && googleMeasurementId) {
+      const firedEvent = await segmentAnalytics.identify(property);
+      // console.log(firedEvent, 'segment');
+  
+      // TODO: add google analytics when segment free plan is bursted
+    } else if (segmentAnalytics) {
+      const firedEvent = await segmentAnalytics.identify(property);
+      // console.log(firedEvent, 'segment');
+    } else if (googleMeasurementId) {
+      const firedEvent = await gaAnalytics.identify(property);
+      // console.log(firedEvent, 'google analytics');
+    }
   }
 }
 
@@ -255,3 +265,31 @@ const searchInputTrack = () => {
 }
 
 searchInputTrack();
+
+const renderConsentManager = () => {
+  const consentManager = document.querySelector('[devhaus-consent-manager]');
+  const consentAcceptButton = document.querySelector('[devhaus-consent-button=accept]');
+  const consentDeclineButton = document.querySelector('[devhaus-consent-button=decline]');
+
+  consentAcceptButton.addEventListener('click', () => {
+    localStorage.setItem('devhaus-consent', 'true');
+  })
+
+  consentDeclineButton.addEventListener('click', () => {
+    localStorage.setItem('devhaus-consent', 'false');
+  })
+
+  if (!localStorage.getItem('devhaus-consent')) {
+    consentManager.style.display = 'flex';
+    consentManager.style.opacity = '0';
+    consentManager.style.transform = 'translateY(30px)';
+    consentManager.style.transition = 'opacity 0.3s linear, transform 0.3s linear';
+
+    requestAnimationFrame(() => {
+      consentManager.style.opacity = '1';
+      consentManager.style.transform = 'translateY(0)';
+    });
+  }
+}
+
+renderConsentManager();

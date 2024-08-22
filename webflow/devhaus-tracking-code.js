@@ -30,15 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (trackByDefault === 'true' || localStorage.getItem('devhaus-consent') === 'true') {
       if (segmentAnalytics && googleMeasurementId) {
         const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() });
-        console.log(firedEvent, 'segment');
+        // console.log(firedEvent, 'segment');
     
         // TODO: add google analytics when segment free plan is bursted
       } else if (segmentAnalytics) {
         const firedEvent = await segmentAnalytics.track(eventName, { ...property, metadata: getMetadata() });
-        console.log(firedEvent, 'segment');
+        // console.log(firedEvent, 'segment');
       } else if (googleMeasurementId) {
         const firedEvent = await gaAnalytics.track(eventName, { ...property, metadata: getMetadata() });
-        console.log(firedEvent, 'google analytics');
+        // console.log(firedEvent, 'google analytics');
       }
     }
   }
